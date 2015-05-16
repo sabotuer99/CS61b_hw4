@@ -3,11 +3,11 @@ package synthesizer;
 
 public class ArrayRingBuffer extends AbstractBoundedQueue {
   /* Index for the next dequeue or peek. */
-  private int first;           
+  public int first;           
   /* Index for the next enqueue. */
-  private int last;             
+  public int last;             
   /* Array for storing the buffer data. */
-  private double[] rb;
+  public double[] rb;
 
   /** Create a new ArrayRingBuffer with the given capacity. */
   public ArrayRingBuffer(int capacity) {
@@ -28,16 +28,14 @@ public class ArrayRingBuffer extends AbstractBoundedQueue {
   public void enqueue(double x) {
     // TODO: Enqueue the item. Don't forget to increase fillCount and update last.
     // is there room?
-	  if(fillCount == capacity)
+	  if(isFull())
 		  throw new RuntimeException("Buffer is full!");
 	  
-	  //if buffer is not empty, advance last
-	  if(!this.isEmpty())
-		  last = advance(last);
-	  
 	  rb[last] = x;
+	  last = advance(last);
+	  
 	  fillCount += 1;
-		  
+	  //System.out.println("First :" + first + " Last:" + last + " ArrSize:" + rb.length);
   }
 
   /** Dequeue oldest item in the ring buffer. If the buffer is empty, then
@@ -45,20 +43,21 @@ public class ArrayRingBuffer extends AbstractBoundedQueue {
     */
   public double dequeue() {
     // TODO: Dequeue the first item. Don't forget to decrease fillCount and update first.
-	  if(fillCount == 0)
+	  if(isEmpty())
 		  throw new RuntimeException("Can't dequeue empty buffer");
 	  
 	  double value = rb[first];
 	  first = advance(first);
 	  fillCount -= 1;
 	  
+	  //System.out.println("First :" + first + " Last:" + last + " ArrSize:" + rb.length);
 	  return value;
   }
 
   /** Return oldest item, but don't remove it. */
   public double peek() {
     // TODO: Return the first item. None of your instance variables should change.
-	  if(fillCount == 0)
+	  if(isEmpty())
 		  throw new RuntimeException("Can't peek empty buffer");
 	  
 	  return rb[first];
@@ -66,8 +65,9 @@ public class ArrayRingBuffer extends AbstractBoundedQueue {
 
   private int advance(int marker){
 	  //if marker is at the end of the array, loop around
-	  if(marker == rb.length -1){
+	  if(marker == (capacity - 1)){
 		  marker = 0;
+		  //System.out.println("advance First :" + first + " Last:" + last + " ArrSize:" + rb.length);
 	  } else {
 		  marker += 1;
 	  }

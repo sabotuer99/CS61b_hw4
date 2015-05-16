@@ -161,7 +161,6 @@ public class TestArrayRingBuffer {
     	arb.enqueue(5.0); //enqueued in rb[0]
     	arb.enqueue(6.0); //enqueued in rb[1]
     	
-    	
         //Act
     	double first = arb.dequeue();
     	double second = arb.dequeue();
@@ -176,6 +175,35 @@ public class TestArrayRingBuffer {
 
     }
 
+    @Test
+    public void FillCount_MultipleEnquesAndDequeues_ReturnsCountOfRemaining() {
+    	//Arrange
+    	ArrayRingBuffer arb = new ArrayRingBuffer(4);
+    	arb.enqueue(1.0);
+    	arb.dequeue();  
+    	arb.enqueue(2.0);
+    	arb.dequeue();  
+    	arb.enqueue(3.0);
+    	arb.dequeue();  
+    	arb.enqueue(4.0); 
+    	arb.dequeue();  
+    	arb.enqueue(1.0);
+    	arb.dequeue();  
+    	arb.enqueue(2.0);
+    	arb.dequeue();  
+    	arb.enqueue(3.0);
+    	arb.dequeue();  
+    	arb.enqueue(4.0); 
+
+    	
+        //Act
+    	int fillCount = arb.fillCount();
+        
+        //Assert
+    	assertEquals(1, fillCount);
+
+    }
+    
     /** Calls tests for ArrayRingBuffer. */
     public static void main(String[] args) {
         jh61b.junit.textui.runClasses(TestArrayRingBuffer.class);
