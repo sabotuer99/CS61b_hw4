@@ -194,14 +194,44 @@ public class TestArrayRingBuffer {
     	arb.enqueue(3.0);
     	arb.dequeue();  
     	arb.enqueue(4.0); 
-
     	
         //Act
     	int fillCount = arb.fillCount();
         
         //Assert
     	assertEquals(1, fillCount);
+    }
+    
+    @Test
+    public void Peek_EmptyAndFillBuffer_ReturnsOldestValues() {
+    	//Arrange
+    	ArrayRingBuffer arb = new ArrayRingBuffer(4);
+    	arb.enqueue(1.0); 
+    	arb.enqueue(2.0);
+    	arb.enqueue(3.0);
+    	arb.enqueue(4.0); 
+    	arb.dequeue(); 
+    	arb.dequeue();  
+    	arb.dequeue();  
+    	arb.dequeue();
+    	arb.enqueue(5.0); 
+    	arb.enqueue(6.0);
+    	arb.enqueue(7.0);
+    	arb.enqueue(8.0); 
+    	arb.dequeue(); 
+    	arb.dequeue();  
+    	arb.dequeue();  
+    	arb.dequeue(); 
+    	arb.enqueue(9.0); 
+    	arb.enqueue(10.0);
+    	arb.enqueue(11.0);
+    	arb.enqueue(12.0); 
 
+        //Act
+    	double peek1 = arb.peek();
+        
+        //Assert
+    	assertEquals(9.0, peek1, DELTA);    	
     }
     
     /** Calls tests for ArrayRingBuffer. */
